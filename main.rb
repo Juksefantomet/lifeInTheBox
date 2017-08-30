@@ -6,6 +6,7 @@ class Game < Gosu::Window
 		@width = 1024
 		@heigth = 768
 		super(width, heigth, false)
+		self.caption = "Life in the box - client"
 	end
 	def button_down(id)
 		case id
@@ -14,6 +15,12 @@ class Game < Gosu::Window
 	end
 	def needs_cursor?
 		true
+	end
+	def update
+
+	end
+	def draw
+
 	end
 end
 
