@@ -45,3 +45,6 @@ players - level 1 - 200
 		when the boss is dead, spawn in a new playfield and allow players 30 seconds of "level up time"
 		
 		increment boss difficulty also based on stage level.
+
+	viewpoint:
+		top view
