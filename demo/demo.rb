@@ -8,6 +8,7 @@ class Game < Gosu::Window
 		@heigth = 768
 		super(width, heigth, false)
 		self.caption = "Life in the box - DEMO"
+		@image = Gosu::Image.from_text self, "O", Gosu.default_font_name, 100
 	end
 	def button_down(id)
 		case id
@@ -27,14 +28,19 @@ class Game < Gosu::Window
 			puts "moved down"
 		end
 	end
+
 	def needs_cursor?
 		false
 	end
-	def update
-		
-	end
-	def draw
 
+	def update
+
+	end
+
+	def draw
+		@image.draw @width/2 - @image.width/2, 
+					@heigth/2, 
+					0
 	end
 end
 
