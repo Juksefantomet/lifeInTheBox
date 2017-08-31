@@ -1,6 +1,8 @@
 require 'gosu'
 require 'socket'
 
+@s = TCPSocket.new('localhost', 18028)
+
 class Game < Gosu::Window
 	attr_accessor :width, :heigth
 	def initialize
@@ -8,7 +10,6 @@ class Game < Gosu::Window
 		@heigth = 768
 		super(width, heigth, false)
 		self.caption = "Life in the box - client"
-		@s = TCPSocket.new('localhost', 18028)
 	end
 	def button_down(id)
 		case id
@@ -30,6 +31,4 @@ class Game < Gosu::Window
 	end
 end
 
-
-game = Game.new
-game.show
+Game.new.show
