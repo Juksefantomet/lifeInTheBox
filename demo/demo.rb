@@ -40,9 +40,11 @@ class Game < Gosu::Window
 			puts "moved down"
 			@yy += @base_speed
 		when Gosu::KbRightShift then
-			puts "Activating Run boost! (5 seconds)"
-			@runBoostActive = true
-			@base_speed = 10
+			if @runBoostActive == false then
+				puts "Activating Run boost! (5 seconds)"
+				@runBoostActive = true
+				@base_speed = 10
+			end
 
 		end
 	end
