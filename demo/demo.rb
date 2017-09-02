@@ -3,7 +3,7 @@ require 'gosu'
 
 # The class that runs the game - woop!
 class Game < Gosu::Window
-	attr_accessor :width, :heigth
+  attr_accessor :width, :heigth
   def initialize
     @width = 1024
     @heigth = 768
@@ -31,20 +31,20 @@ class Game < Gosu::Window
       close
       puts "Quitting"
     when Gosu::KB_LEFT then
-      puts "moved left"
+      # puts "moved left"
       # @xx += -@base_speed && @angle = 1.0 if button_down? Gosu::KB_LEFT
       #@xx += -@base_speed
     when Gosu::KB_RIGHT then
-      puts "moved right"
+      # puts "moved right"
       #@xx += @base_speed
     when Gosu::KB_UP then
-      puts "moved up"
+      # puts "moved up"
       #@yy += -@base_speed
     when Gosu::KB_DOWN then
-      puts "moved down"
+      # puts "moved down"
       #@yy += @base_speed
     when Gosu::KB_SPACE then
-      puts "fire a small volley!"
+      # puts "fire a small volley!"
     when Gosu::KB_RIGHT_SHIFT then
       if @run_boost_active == false then
         puts "Activating Run boost! (5 seconds)"
@@ -55,67 +55,70 @@ class Game < Gosu::Window
   end
   
   def spin_tank_wheels
-  	if @a != 3
-  		@a += 1
-  		@h = @a
-  	end
-  	if @a == 3
-  		@h = @a
-  		@a = 0
-  	end
+    if @a != 3
+      @a += 1
+      @h = @a
+    end
+    if @a == 3
+      @h = @a
+      @a = 0
+    end
   end
   def fire_bullet
-  	if button_down? Gosu::KB_SPACE
-  		# Create bullet at xx,yy loc - give travel time pr. tick set by bullet variable.
-  	end
+    if button_down? Gosu::KB_SPACE
+      # Create bullet at xx,yy loc - give travel time pr. tick set by bullet variable.
+    end
   end
   def movement
-  	if button_down? Gosu::KB_LEFT
-  		spin_tank_wheels
-  		@xx += -@base_speed
-  		@angle = -180.0
-  	end
-  	if button_down? Gosu::KB_RIGHT
-  		spin_tank_wheels
-  		@xx += @base_speed
-  		@angle = 0.0
-  	end
-  	if button_down? Gosu::KB_UP
-  		spin_tank_wheels
-  	  @yy += -@base_speed
-  	  @angle = -90.0
-  	end
-  	if button_down? Gosu::KB_DOWN
-  		spin_tank_wheels
-  		@yy += @base_speed
-  		@angle = 90.0
-  	end
+    if button_down? Gosu::KB_LEFT
+    	spin_tank_wheels
+      @xx += -@base_speed
+      @angle = -180.0
+    end
+    if button_down? Gosu::KB_RIGHT
+      spin_tank_wheels
+      @xx += @base_speed
+      @angle = 0.0
+    end
+    if button_down? Gosu::KB_UP
+      spin_tank_wheels
+      @yy += -@base_speed
+      @angle = -90.0
+    end
+    if button_down? Gosu::KB_DOWN
+      spin_tank_wheels
+      @yy += @base_speed
+      @angle = 90.0
+    end
   end
 
   def needs_cursor?
     false
   end
-    
+
   def drawgui
   end
 
   def update
-  	movement
+    movement
     @x = @width / 2 + Math.cos(Time.now.to_f)*150
     @y = @heigth / 2 + Math.sin(Time.now.to_f)*150
     # drawgui
-    if @check_tick == 60 then @check_tick = 0 end
-    if @check_tick != 60 then @check_tick += 1 end
-    if @run_boost_active == true then
-      if @temp_tick != 300 then @temp_tick += 1 end
-      if @temp_tick == 300
+    if @check_tick == 60
+      @check_tick = 0
+    else
+      @check_tick += 1
+    end
+    unless @run_boost_active == false
+      if @temp_tick != 300
+        @temp_tick += 1
+      else
         @temp_tick = 0
         @run_boost_active = false
         @run_cool_down_active = true
         @base_speed = 5
       end
     end
-    
   end
 
   def draw
