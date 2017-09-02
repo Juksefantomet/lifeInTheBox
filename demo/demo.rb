@@ -8,16 +8,16 @@ class Game < Gosu::Window
     @width = 1024
     @heigth = 768
     super(width, heigth, false)
-    self.caption = "Life in the box - DEMO"
+    self.caption = 'Life in the box - DEMO'
     @base_speed = 5
     @check_tick = 0
     @temp_tick = 0
     @run_boost_active = false
     @run_cool_down_active = false
     # @image_player = Gosu::Image.new("single_tank.png")
-    @image_boss = Gosu::Image.new("boss.png")
-    @image_bullet = Gosu::Image.new("bullet.png")
-    @image_player = Gosu::Image.load_tiles("496x63_tank_4.png", 124, 63)
+    @image_boss = Gosu::Image.new('boss.png')
+    @image_bullet = Gosu::Image.new('bullet.png')
+    @image_player = Gosu::Image.load_tiles('496x63_tank_4.png', 124, 63)
     @xx = @yy = @x = @y = 0
     @angle = 0.0
     @h = 0
@@ -30,27 +30,16 @@ class Game < Gosu::Window
     when Gosu::KB_ESCAPE then 
       close
       puts "Quitting"
-    when Gosu::KB_LEFT then
-      # puts "moved left"
-      # @xx += -@base_speed && @angle = 1.0 if button_down? Gosu::KB_LEFT
-      #@xx += -@base_speed
-    when Gosu::KB_RIGHT then
-      # puts "moved right"
-      #@xx += @base_speed
-    when Gosu::KB_UP then
-      # puts "moved up"
-      #@yy += -@base_speed
-    when Gosu::KB_DOWN then
-      # puts "moved down"
-      #@yy += @base_speed
-    when Gosu::KB_SPACE then
-      # puts "fire a small volley!"
+    # when Gosu::KB_LEFT then
+    # when Gosu::KB_RIGHT then
+    # when Gosu::KB_UP then
+    # when Gosu::KB_DOWN then
+    # when Gosu::KB_SPACE then
     when Gosu::KB_RIGHT_SHIFT then
-      if @run_boost_active == false then
-        puts "Activating Run boost! (5 seconds)"
-        @run_boost_active = true
-        @base_speed = 10
-      end
+      return if @run_boost_active
+      puts 'Activating Run boost! (5 seconds)'
+      @run_boost_active = true
+      @base_speed = 10
     end
   end
   
@@ -64,14 +53,17 @@ class Game < Gosu::Window
       @a = 0
     end
   end
+
   def fire_bullet
-    if button_down? Gosu::KB_SPACE
-      # Create bullet at xx,yy loc - give travel time pr. tick set by bullet variable.
-    end
+    return unless button_down? Gosu::KB_SPACE
+    # Create bullet at xx,yy loc
+    # give travel time pr. tick set by bullet variable.
+    # calculate angle where to shoot from player angle
   end
+
   def movement
     if button_down? Gosu::KB_LEFT
-    	spin_tank_wheels
+      spin_tank_wheels
       @xx += -@base_speed
       @angle = -180.0
     end
@@ -97,32 +89,36 @@ class Game < Gosu::Window
   end
 
   def drawgui
+
+  end
+
+  def tickcooldowns
+    if @temp_tick != 300
+      @temp_tick += 1
+    else
+      @temp_tick = 0
+      @run_boost_active = false
+      @run_cool_down_active = true
+      @base_speed = 5
+    end
   end
 
   def update
     movement
-    @x = @width / 2 + Math.cos(Time.now.to_f)*150
-    @y = @heigth / 2 + Math.sin(Time.now.to_f)*150
+    @x = @width / 2 + Math.cos(Time.now.to_f) * 150
+    @y = @heigth / 2 + Math.sin(Time.now.to_f) * 150
     # drawgui
     if @check_tick == 60
       @check_tick = 0
     else
       @check_tick += 1
     end
-    unless @run_boost_active == false
-      if @temp_tick != 300
-        @temp_tick += 1
-      else
-        @temp_tick = 0
-        @run_boost_active = false
-        @run_cool_down_active = true
-        @base_speed = 5
-      end
-    end
+    return unless @run_boost_active
+      tickcooldowns
   end
 
   def draw
-    @image_boss.draw(@x, @y, 0)
+    @image_boss.draw(@x, @y, 1)
     @image_player[@h].draw_rot(@xx, @yy, 0, @angle, 0.5, 0.5, 0.8)
   end
 end
