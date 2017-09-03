@@ -10,31 +10,22 @@ class Game < Gosu::Window
     super(width, heigth, false)
     self.caption = 'Life in the box - DEMO'
     @base_speed = 5
-    @check_tick = 0
-    @temp_tick = 0
     @run_boost_active = false
     @run_cool_down_active = false
     # @image_player = Gosu::Image.new("single_tank.png")
     @image_boss = Gosu::Image.new('boss.png')
     @image_bullet = Gosu::Image.new('bullet.png')
     @image_player = Gosu::Image.load_tiles('496x63_tank_4.png', 124, 63)
-    @xx = @yy = @x = @y = 0
+    @xx = @yy = @x = @y = @h = @a = @check_tick = @temp_tick = 0
     @angle = 0.0
-    @h = 0
-    @a = 0
     # @background_image = Gosu::Image.new("bg.png", :tileable => true)
   end
 
-  def button_down id
+  def button_down(id)
     case id
-    when Gosu::KB_ESCAPE then 
+    when Gosu::KB_ESCAPE then
       close
-      puts "Quitting"
-    # when Gosu::KB_LEFT then
-    # when Gosu::KB_RIGHT then
-    # when Gosu::KB_UP then
-    # when Gosu::KB_DOWN then
-    # when Gosu::KB_SPACE then
+      puts 'Quitting'
     when Gosu::KB_RIGHT_SHIFT then
       return if @run_boost_active
       puts 'Activating Run boost! (5 seconds)'
@@ -42,15 +33,14 @@ class Game < Gosu::Window
       @base_speed = 10
     end
   end
-  
+
   def spin_tank_wheels
-    if @a != 3
-      @a += 1
-      @h = @a
-    end
     if @a == 3
       @h = @a
       @a = 0
+    else
+      @a += 1
+      @h = @a
     end
   end
 
@@ -61,26 +51,50 @@ class Game < Gosu::Window
     # calculate angle where to shoot from player angle
   end
 
-  def movement
-    if button_down? Gosu::KB_LEFT
-      spin_tank_wheels
-      @xx += -@base_speed
-      @angle = -180.0
+  def moveleft
+    return unless button_down? Gosu::KB_LEFT
+    spin_tank_wheels
+    @xx += -@base_speed
+    @angle = -180.0
+  end
+
+  def moveright
+    return unless button_down? Gosu::KB_RIGHT
+    spin_tank_wheels
+    @xx += @base_speed
+    @angle = 0.0
+  end
+
+  def moveup
+    return unless button_down? Gosu::KB_UP
+    spin_tank_wheels
+    @yy += -@base_speed
+    @angle = -90.0
+  end
+
+  def movedown
+    return unless button_down? Gosu::KB_DOWN
+    spin_tank_wheels
+    @yy += @base_speed
+    @angle = 90.0
+  end
+
+  def accelerate()end
+
+  def slowdown()end
+
+  def movement_controller
+    if Gosu::KB_LEFT
+      moveleft
     end
-    if button_down? Gosu::KB_RIGHT
-      spin_tank_wheels
-      @xx += @base_speed
-      @angle = 0.0
+    if Gosu::KB_RIGHT
+      moveright
     end
-    if button_down? Gosu::KB_UP
-      spin_tank_wheels
-      @yy += -@base_speed
-      @angle = -90.0
+    if Gosu::KB_UP
+      moveup
     end
-    if button_down? Gosu::KB_DOWN
-      spin_tank_wheels
-      @yy += @base_speed
-      @angle = 90.0
+    if Gosu::KB_DOWN
+      movedown
     end
   end
 
@@ -88,26 +102,21 @@ class Game < Gosu::Window
     false
   end
 
-  def drawgui
-
-  end
+  def drawgui()end
 
   def tickcooldowns
     if @temp_tick != 300
       @temp_tick += 1
-    else
-      @temp_tick = 0
-      @run_boost_active = false
-      @run_cool_down_active = true
-      @base_speed = 5
     end
+    return unless @temp_tick == 300
+    @temp_tick == 300
+    @temp_tick = 0
+    @run_boost_active = false
+    @run_cool_down_active = true
+    @base_speed = 5
   end
 
-  def update
-    movement
-    @x = @width / 2 + Math.cos(Time.now.to_f) * 150
-    @y = @heigth / 2 + Math.sin(Time.now.to_f) * 150
-    # drawgui
+  def checkticks
     if @check_tick == 60
       @check_tick = 0
     else
@@ -115,6 +124,14 @@ class Game < Gosu::Window
     end
     return unless @run_boost_active
       tickcooldowns
+  end
+
+  def update
+    movement_controller
+    @x = @width / 2 + Math.cos(Time.now.to_f) * 150
+    @y = @heigth / 2 + Math.sin(Time.now.to_f) * 150
+    # drawgui
+    checkticks
   end
 
   def draw

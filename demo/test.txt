@@ -1,0 +1,23 @@
+Inspecting 1 file
+E
+
+Offenses:
+
+demo.rb:84:24: E: unexpected token tCONSTANT
+(Using Ruby 2.1 parser; configure using TargetRubyVersion parameter, under AllCops)
+  	  when button_down? Gosu::KB_LEFT then
+                       ^^^^
+demo.rb:84:38: E: unexpected token kTHEN
+(Using Ruby 2.1 parser; configure using TargetRubyVersion parameter, under AllCops)
+  	  when button_down? Gosu::KB_LEFT then
+                                     ^^^^
+demo.rb:86:39: E: unexpected token kTHEN
+(Using Ruby 2.1 parser; configure using TargetRubyVersion parameter, under AllCops)
+  	  when button_down? Gosu::KB_RIGHT then
+                                      ^^^^
+demo.rb:136:1: E: unexpected token kEND
+(Using Ruby 2.1 parser; configure using TargetRubyVersion parameter, under AllCops)
+end
+^^^
+
+1 file inspected, 4 offenses detected
