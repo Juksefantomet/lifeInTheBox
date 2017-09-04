@@ -9,15 +9,23 @@ class Game < Gosu::Window
     @heigth = 768
     super(width, heigth, false)
     self.caption = 'Life in the box - DEMO'
-    @base_speed = 5
+    vars_test
+    images_test
+
+  end
+  
+  def vars_test
+    @base_speed = 3
     @run_boost_active = false
     @run_cool_down_active = false
-    # @image_player = Gosu::Image.new("single_tank.png")
+    @xx = @yy = @x = @y = @h = @a = @check_tick = @temp_tick = 0
+    @angle = 0.0 
+  end
+
+  def images_test
     @image_boss = Gosu::Image.new('boss.png')
     @image_bullet = Gosu::Image.new('bullet.png')
     @image_player = Gosu::Image.load_tiles('496x63_tank_4.png', 124, 63)
-    @xx = @yy = @x = @y = @h = @a = @check_tick = @temp_tick = 0
-    @angle = 0.0
     # @background_image = Gosu::Image.new("bg.png", :tileable => true)
   end
 
@@ -128,10 +136,10 @@ class Game < Gosu::Window
 
   def update
     movement_controller
-    @x = @width / 2 + Math.cos(Time.now.to_f) * 150
-    @y = @heigth / 2 + Math.sin(Time.now.to_f) * 150
-    # drawgui
     checkticks
+    # drawgui
+    @x = @width / 2 + Math.cos(Time.now.to_f) * 75
+    @y = @heigth / 2 + Math.sin(Time.now.to_f) * 75
   end
 
   def draw
