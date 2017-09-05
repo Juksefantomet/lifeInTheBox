@@ -4,14 +4,21 @@ require 'gosu'
 # tank class - type player/boss - image used
 class Tank
   attr_accessor
-  def initialize(width, heigth)
+  def initialize(width, height)
     @image_player = Gosu::Image.load_tiles('496x63_tank_4.png', 124, 63)
     @image_boss = Gosu::Image.new('boss.png')
-    @xx = @yy = @zz = @h = @angle = @a = @b = @c = 0
+    @xx = 0
+    @yy = 0
+    @zz = 0
+    @h = 0
+    @angle = 0.0
+    @a = 0
+    @b = 0
+    @c = 0
     @width = width
-    @heigth = heigth
+    @height = height
     @x = @width / 2
-    @y = @heigth / 2
+    @y = @height / 2
     @z = 0
     @base_speed = 3
   end
@@ -28,7 +35,7 @@ class Tank
 
   def center_the_boss
     @x = @width / 2 + Math.cos(Time.now.to_f) * 150
-    @y = @heigth / 2 + Math.sin(Time.now.to_f) * 150
+    @y = @height / 2 + Math.sin(Time.now.to_f) * 150
   end
 
   # Function draw calls this when moving to do wheel animations
@@ -38,7 +45,7 @@ class Tank
   end
 
   def moveleft
-    return unless button_down? Gosu::KB_LEFT
+    return unless Gosu.button_down? Gosu::KB_LEFT
     spin_tank_wheels
     @xx += -@base_speed
     @angle = -180.0
@@ -46,7 +53,7 @@ class Tank
   end
 
   def moveright
-    return unless button_down? Gosu::KB_RIGHT
+    return unless Gosu.button_down? Gosu::KB_RIGHT
     spin_tank_wheels
     @xx += @base_speed
     @angle = 0.0
@@ -54,7 +61,7 @@ class Tank
   end
 
   def moveup
-    return unless button_down? Gosu::KB_UP
+    return unless Gosu.button_down? Gosu::KB_UP
     spin_tank_wheels
     @yy += -@base_speed
     @angle = -90.0
@@ -62,7 +69,7 @@ class Tank
   end
 
   def movedown
-    return unless button_down? Gosu::KB_DOWN
+    return unless Gosu.button_down? Gosu::KB_DOWN
     spin_tank_wheels
     @yy += @base_speed
     @angle = 90.0
@@ -70,16 +77,16 @@ class Tank
   end
 
   def movement_controller
-    if button_down? Gosu::KB_LEFT
+    if Gosu.button_down? Gosu::KB_LEFT
       moveleft
     end
-    if button_down? Gosu::KB_RIGHT
+    if Gosu.button_down? Gosu::KB_RIGHT
       moveright
     end
-    if button_down? Gosu::KB_UP
+    if Gosu.button_down? Gosu::KB_UP
       moveup
     end
-    if button_down? Gosu::KB_DOWN
+    if Gosu.button_down? Gosu::KB_DOWN
       movedown
     end
   end
@@ -90,21 +97,22 @@ class Tank
 
   def update
     center_the_boss
+    movement_controller
   end
 end
 
 # The class that runs the game - woop!
 class Game < Gosu::Window
-  attr_accessor :width, :heigth
+  attr_accessor :width, :height
   def initialize
     @width = 1024
-    @heigth = 768
-    super(width, heigth, false)
+    @height = 768
+    super(width, height, false)
     self.caption = 'Life in the box - DEMO'
     vars_test
     images_test
-    @boss = Tank.new(@width, @heigth)
-    @player = Tank.new(@width, @heigth)
+    @boss = Tank.new(@width, @height)
+    @player = Tank.new(@width, @height)
   end
 
   def vars_test
@@ -169,7 +177,6 @@ class Game < Gosu::Window
   end
 
   def update
-    @player.movement_controller
     checkticks
     # drawgui
     @boss.update
