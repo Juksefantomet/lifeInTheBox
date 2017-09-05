@@ -25,8 +25,9 @@ class Tank
 
   def accelerate()end
 
-  def draw_player(h, xx, yy, zz, angle, a, b, c)
-    @image_player[@h].draw_rot(@xx, @yy, @zz, @angle, @a, @b, @c)
+  def draw_player(xx, yy, zz, angle)
+    # @image_player[@h].draw_rot(@xx, @yy, @zz, @angle, @a, @b, @c)
+    @image_player[@h].draw_rot(@xx, @yy, @zz, @angle, 0.5, 0.5, 0.8)
   end
 
   def draw_boss(x, y, z)
@@ -49,7 +50,6 @@ class Tank
     spin_tank_wheels
     @xx += -@base_speed
     @angle = -180.0
-    puts "moving left"
   end
 
   def moveright
@@ -57,7 +57,6 @@ class Tank
     spin_tank_wheels
     @xx += @base_speed
     @angle = 0.0
-    puts "moving right"
   end
 
   def moveup
@@ -65,7 +64,6 @@ class Tank
     spin_tank_wheels
     @yy += -@base_speed
     @angle = -90.0
-    puts "moving up"
   end
 
   def movedown
@@ -73,7 +71,6 @@ class Tank
     spin_tank_wheels
     @yy += @base_speed
     @angle = 90.0
-    puts "moving down"
   end
 
   def movement_controller
@@ -91,9 +88,13 @@ class Tank
     end
   end
 
-  def accelerate()end
+  def accelerate
+    @base_speed = 10
+  end
 
-  def slowdown()end
+  def slowdown
+    @base_speed = 3
+  end
 
   def update
     center_the_boss
@@ -136,7 +137,7 @@ class Game < Gosu::Window
       return if @run_boost_active
       puts 'Activating Run boost! (5 seconds)'
       @run_boost_active = true
-      @base_speed = 10
+      @player.accelerate
     end
   end
 
@@ -163,7 +164,7 @@ class Game < Gosu::Window
     @temp_tick = 0
     @run_boost_active = false
     @run_cool_down_active = true
-    @base_speed = 5
+    @player.slowdown
   end
 
   def checkticks
@@ -185,7 +186,7 @@ class Game < Gosu::Window
 
   def draw
     @boss.draw_boss(@x, @y, 1)
-    @player.draw_player(@h, @xx, @yy, 0, @angle, 0.5, 0.5, 0.8)
+    @player.draw_player(@xx, @yy, 0, @angle)
     # @image_boss.draw(@x, @y, 1)
     # @image_player[@h].draw_rot(@xx, @yy, 0, @angle, 0.5, 0.5, 0.8)
   end
