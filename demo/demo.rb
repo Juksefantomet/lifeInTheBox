@@ -1,69 +1,6 @@
 require 'gosu'
 # require 'socket'
 
-# movement controller
-class Player_movement
-  attr_accessor
-  def initialize
-    @xx = 0
-    @yy = 0
-    @angle = 0
-    @base_speed = 3
-    @button_down = Gosu::KB_LEFT
-  end
-
-  def moveleft
-    # return unless button_down? Gosu::KB_LEFT
-    # spin_tank_wheels
-    @xx += -@base_speed
-    @angle = -180.0
-  end
-
-  def moveright
-    # return unless button_down? Gosu::KB_RIGHT
-    # spin_tank_wheels
-    @xx += @base_speed
-    @angle = 0.0
-  end
-
-  def moveup
-    # return unless button_down? Gosu::KB_UP
-    # spin_tank_wheels
-    @yy += -@base_speed
-    @angle = -90.0
-  end
-
-  def movedown
-    # return unless button_down? Gosu::KB_DOWN
-    # spin_tank_wheels
-    @yy += @base_speed
-    @angle = 90.0
-  end
-
-  def accelerate()end
-
-  def slowdown()end
-
-  def movement_controller
-    if Gosu::KB_LEFT
-      moveleft
-    end
-    if Gosu::KB_RIGHT
-      moveright
-    end
-    if Gosu::KB_UP
-      moveup
-    end
-    if Gosu::KB_DOWN
-      movedown
-    end
-  end
-
-  def update
-    movement_controller
-  end
-end
-
 # tank class - type player/boss - image used
 class Tank
   attr_accessor
@@ -76,12 +13,12 @@ class Tank
     @x = @width / 2
     @y = @heigth / 2
     @z = 0
+    @base_speed = 3
   end
 
   def accelerate()end
 
   def draw_player(h, xx, yy, zz, angle, a, b, c)
-    # @image_player[@h].draw_rot(@xx, @yy, 0, @angle, 0.5, 0.5, 0.8)
     @image_player[@h].draw_rot(@xx, @yy, @zz, @angle, @a, @b, @c)
   end
 
@@ -93,6 +30,63 @@ class Tank
     @x = @width / 2 + Math.cos(Time.now.to_f) * 150
     @y = @heigth / 2 + Math.sin(Time.now.to_f) * 150
   end
+
+  # Function draw calls this when moving to do wheel animations
+  def spin_tank_wheels
+    @h = @a
+    @a = (@a + 1).modulo(4)
+  end
+
+  def moveleft
+    return unless button_down? Gosu::KB_LEFT
+    spin_tank_wheels
+    @xx += -@base_speed
+    @angle = -180.0
+    puts "moving left"
+  end
+
+  def moveright
+    return unless button_down? Gosu::KB_RIGHT
+    spin_tank_wheels
+    @xx += @base_speed
+    @angle = 0.0
+    puts "moving right"
+  end
+
+  def moveup
+    return unless button_down? Gosu::KB_UP
+    spin_tank_wheels
+    @yy += -@base_speed
+    @angle = -90.0
+    puts "moving up"
+  end
+
+  def movedown
+    return unless button_down? Gosu::KB_DOWN
+    spin_tank_wheels
+    @yy += @base_speed
+    @angle = 90.0
+    puts "moving down"
+  end
+
+  def movement_controller
+    if button_down? Gosu::KB_LEFT
+      moveleft
+    end
+    if button_down? Gosu::KB_RIGHT
+      moveright
+    end
+    if button_down? Gosu::KB_UP
+      moveup
+    end
+    if button_down? Gosu::KB_DOWN
+      movedown
+    end
+  end
+
+  def accelerate()end
+
+  def slowdown()end
 
   def update
     center_the_boss
@@ -111,7 +105,6 @@ class Game < Gosu::Window
     images_test
     @boss = Tank.new(@width, @heigth)
     @player = Tank.new(@width, @heigth)
-    movement = Player_movement.new
   end
 
   def vars_test
@@ -139,12 +132,6 @@ class Game < Gosu::Window
     end
   end
 
-  # Function draw calls this when moving to do wheel animations
-  def spin_tank_wheels
-    @h = @a
-    @a = (@a + 1).modulo(4)
-  end
-
   def fire_bullet
     return unless button_down? Gosu::KB_SPACE
     # Create bullet at xx,yy loc
@@ -156,6 +143,7 @@ class Game < Gosu::Window
     false
   end
 
+  # make this an independant class
   def drawgui()end
 
   def tickcooldowns
@@ -181,11 +169,11 @@ class Game < Gosu::Window
   end
 
   def update
-    movement.update
-    # movement_controller
+    @player.movement_controller
     checkticks
     # drawgui
     @boss.update
+    @player.update
   end
 
   def draw
