@@ -4,9 +4,8 @@ require 'gosu'
 # tank class - type player/boss - image used
 class Tank
   attr_accessor
-  def initialize(width, height)
-    @image_player = Gosu::Image.load_tiles('496x63_tank_4.png', 124, 63)
-    @image_boss = Gosu::Image.new('boss.png')
+  def initialize(width, height, image)
+    @image = image
     @xx = 0
     @yy = 0
     @zz = 0
@@ -23,17 +22,12 @@ class Tank
     @base_speed = 3
   end
 
-  def accelerate()end
-
-  def draw_player(xx, yy, zz, angle)
-    # @image_player[@h].draw_rot(@xx, @yy, @zz, @angle, @a, @b, @c)
-    @image_player[@h].draw_rot(@xx, @yy, @zz, @angle, 0.5, 0.5, 0.8)
+  def draw(x, y, z)
+    @image.draw(@x, @y, @z)
   end
-
-  def draw_boss(x, y, z)
-    @image_boss.draw(@x, @y, @z)
+  def draw_rot(x, y, z, angle)
+    @image[@h].draw_rot(@xx, @yy, @zz, @angle, 0.5, 0.5, 0.8)
   end
-
   def center_the_boss
     @x = @width / 2 + Math.cos(Time.now.to_f) * 150
     @y = @height / 2 + Math.sin(Time.now.to_f) * 150
@@ -112,8 +106,8 @@ class Game < Gosu::Window
     self.caption = 'Life in the box - DEMO'
     vars_test
     images_test
-    @boss = Tank.new(@width, @height)
-    @player = Tank.new(@width, @height)
+    @boss = Tank.new(@width, @height, @image_boss)
+    @player = Tank.new(@width, @height, @image_player)
   end
 
   def vars_test
@@ -124,7 +118,8 @@ class Game < Gosu::Window
 
   def images_test
     @image_bullet = Gosu::Image.new('bullet.png')
-    
+    @image_player = Gosu::Image.load_tiles('496x63_tank_4.png', 124, 63)
+    @image_boss = Gosu::Image.new('boss.png')
     # @background_image = Gosu::Image.new("bg.png", :tileable => true)
   end
 
@@ -185,8 +180,9 @@ class Game < Gosu::Window
   end
 
   def draw
-    @boss.draw_boss(@x, @y, 1)
-    @player.draw_player(@xx, @yy, 0, @angle)
+    @boss.draw(@x, @y, 1)
+    @player.draw_rot(@xx, @yy, @zz, @angle)
+    # @image_player[@h].draw_rot(@xx, @yy, @zz, @angle, 0.5, 0.5, 0.8)
     # @image_boss.draw(@x, @y, 1)
     # @image_player[@h].draw_rot(@xx, @yy, 0, @angle, 0.5, 0.5, 0.8)
   end
