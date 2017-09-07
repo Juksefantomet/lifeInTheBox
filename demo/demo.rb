@@ -40,28 +40,24 @@ class Tank
   end
 
   def moveleft
-    return unless Gosu.button_down? Gosu::KB_LEFT
     spin_tank_wheels
     @xx += -@base_speed
     @angle = -180.0
   end
 
   def moveright
-    return unless Gosu.button_down? Gosu::KB_RIGHT
     spin_tank_wheels
     @xx += @base_speed
     @angle = 0.0
   end
 
   def moveup
-    return unless Gosu.button_down? Gosu::KB_UP
     spin_tank_wheels
     @yy += -@base_speed
     @angle = -90.0
   end
 
   def movedown
-    return unless Gosu.button_down? Gosu::KB_DOWN
     spin_tank_wheels
     @yy += @base_speed
     @angle = 90.0
