@@ -10,24 +10,24 @@ class Tank
     @yy = 0
     @zz = 0
     @h = 0
-    @angle = 0.0
     @a = 0
-    @b = 0
-    @c = 0
+    @angle = 0.0
     @width = width
     @height = height
-    @x = @width / 2
-    @y = @height / 2
+    @x = 0
+    @y = 0
     @z = 0
     @base_speed = 3
   end
 
-  def draw(x, y, z)
+  def draw(*)
     @image.draw(@x, @y, @z)
   end
-  def draw_rot(x, y, z, angle)
+
+  def drawrot(*)
     @image[@h].draw_rot(@xx, @yy, @zz, @angle, 0.5, 0.5, 0.8)
   end
+
   def center_the_boss
     @x = @width / 2 + Math.cos(Time.now.to_f) * 150
     @y = @height / 2 + Math.sin(Time.now.to_f) * 150
@@ -181,7 +181,7 @@ class Game < Gosu::Window
 
   def draw
     @boss.draw(@x, @y, 1)
-    @player.draw_rot(@xx, @yy, @zz, @angle)
+    @player.drawrot(@xx, @yy, @zz)
     # @image_player[@h].draw_rot(@xx, @yy, @zz, @angle, 0.5, 0.5, 0.8)
     # @image_boss.draw(@x, @y, 1)
     # @image_player[@h].draw_rot(@xx, @yy, 0, @angle, 0.5, 0.5, 0.8)
