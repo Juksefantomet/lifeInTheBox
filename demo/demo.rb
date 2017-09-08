@@ -1,6 +1,25 @@
 require 'gosu'
 # require 'socket'
 
+# Ammotypes
+class Ammo
+  attr_accessor
+  def initialize(image)
+    @image = image
+    @bullet_speed = 10
+    @damage = 10
+    @x = 0
+    @y = 0
+    @z = 0
+  end
+  def bullet(*)
+    @image.draw(@x, @y, @z)
+    # Create bullet at xx,yy loc
+    # give travel time pr. tick set by bullet variable.
+    # calculate angle where to shoot from player angle
+  end
+end
+
 # tank class - type player/boss - image used
 class Tank
   attr_accessor
@@ -63,6 +82,33 @@ class Tank
     @angle = 90.0
   end
 
+  def moveupright
+    spin_tank_wheels
+    @xx += @base_speed/4
+    @yy += -@base_speed/4
+    @angle = -45.0
+  end
+  
+  def moveupleft
+    spin_tank_wheels
+    @xx += -@base_speed/4
+    @yy += -@base_speed/4
+    @angle = -135.0
+  end
+
+  def movedownright
+    spin_tank_wheels
+    @yy += @base_speed/4
+    @xx += @base_speed/4
+    @angle = 45.0
+  end
+  def movedownleft
+    spin_tank_wheels
+    @yy += @base_speed/4
+    @xx += -@base_speed/4
+    @angle = 135.0
+  end
+
   def movement_controller
     if Gosu.button_down? Gosu::KB_LEFT
       moveleft
@@ -76,6 +122,21 @@ class Tank
     if Gosu.button_down? Gosu::KB_DOWN
       movedown
     end
+    if (Gosu.button_down? Gosu::KB_UP and Gosu.button_down? Gosu::KB_RIGHT) or (Gosu.button_down? Gosu::KB_RIGHT and Gosu.button_down? Gosu::KB_UP)
+      moveupright
+    end
+    if (Gosu.button_down? Gosu::KB_DOWN and Gosu.button_down? Gosu::KB_RIGHT) or (Gosu.button_down? Gosu::KB_RIGHT and Gosu.button_down? Gosu::KB_DOWN)
+      movedownright
+    end
+    if (Gosu.button_down? Gosu::KB_UP and Gosu.button_down? Gosu::KB_LEFT) or (Gosu.button_down? Gosu::KB_LEFT and Gosu.button_down? Gosu::KB_UP)
+      moveupleft
+    end
+    if (Gosu.button_down? Gosu::KB_DOWN and Gosu.button_down? Gosu::KB_LEFT) or (Gosu.button_down? Gosu::KB_LEFT and Gosu.button_down? Gosu::KB_DOWN)
+      movedownleft
+    end
+    if Gosu.button_down? Gosu::KB_SPACE
+      fire_bullet
+    end
   end
 
   def accelerate
@@ -84,6 +145,13 @@ class Tank
 
   def slowdown
     @base_speed = 3
+  end
+
+  def fire_bullet
+  	# @tank_bullet.bullet(@x, @y, @z)
+    # Create bullet at xx,yy loc
+    # give travel time pr. tick set by bullet variable.
+    # calculate angle where to shoot from player angle
   end
 
   def update
@@ -104,6 +172,7 @@ class Game < Gosu::Window
     images_test
     @boss = Tank.new(@width, @height, @image_boss)
     @player = Tank.new(@width, @height, @image_player)
+    # @tank_bullet = Ammo.new(@image_bullet)
   end
 
   def vars_test
@@ -130,13 +199,6 @@ class Game < Gosu::Window
       @run_boost_active = true
       @player.accelerate
     end
-  end
-
-  def fire_bullet
-    return unless button_down? Gosu::KB_SPACE
-    # Create bullet at xx,yy loc
-    # give travel time pr. tick set by bullet variable.
-    # calculate angle where to shoot from player angle
   end
 
   def needs_cursor?
@@ -178,9 +240,6 @@ class Game < Gosu::Window
   def draw
     @boss.draw(@x, @y, 1)
     @player.drawrot(@xx, @yy, @zz)
-    # @image_player[@h].draw_rot(@xx, @yy, @zz, @angle, 0.5, 0.5, 0.8)
-    # @image_boss.draw(@x, @y, 1)
-    # @image_player[@h].draw_rot(@xx, @yy, 0, @angle, 0.5, 0.5, 0.8)
   end
 end
 
