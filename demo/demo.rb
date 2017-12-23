@@ -149,12 +149,9 @@ class Tank
   end
 
   def fire_bullet
-<<<<<<< HEAD
     print "pang"
   	# @tank_bullet.bullet(@x, @y, @z)
-=======
   	@tank_bullet.bullet(@x, @y, @z)
->>>>>>> f49d7f97f87580cd76f9ef60b05e16c57dd62aa4
     # Create bullet at xx,yy loc
     # give travel time pr. tick set by bullet variable.
     # calculate angle where to shoot from player angle
