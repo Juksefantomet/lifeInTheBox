@@ -37,6 +37,7 @@ class Tank
     @y = 0
     @z = 0
     @base_speed = 3
+    @tank_bullet = Ammo.new(@image_bullet)
   end
 
   def draw(*)
@@ -84,28 +85,28 @@ class Tank
 
   def moveupright
     spin_tank_wheels
-    @xx += @base_speed/4
-    @yy += -@base_speed/4
+    @xx += @base_speed/8
+    @yy += -@base_speed/8
     @angle = -45.0
   end
   
   def moveupleft
     spin_tank_wheels
-    @xx += -@base_speed/4
-    @yy += -@base_speed/4
+    @xx += -@base_speed/8
+    @yy += -@base_speed/8
     @angle = -135.0
   end
 
   def movedownright
     spin_tank_wheels
-    @yy += @base_speed/4
-    @xx += @base_speed/4
+    @yy += @base_speed/8
+    @xx += @base_speed/8
     @angle = 45.0
   end
   def movedownleft
     spin_tank_wheels
-    @yy += @base_speed/4
-    @xx += -@base_speed/4
+    @yy += @base_speed/8
+    @xx += -@base_speed/8
     @angle = 135.0
   end
 
@@ -148,8 +149,12 @@ class Tank
   end
 
   def fire_bullet
+<<<<<<< HEAD
     print "pang"
   	# @tank_bullet.bullet(@x, @y, @z)
+=======
+  	@tank_bullet.bullet(@x, @y, @z)
+>>>>>>> f49d7f97f87580cd76f9ef60b05e16c57dd62aa4
     # Create bullet at xx,yy loc
     # give travel time pr. tick set by bullet variable.
     # calculate angle where to shoot from player angle
