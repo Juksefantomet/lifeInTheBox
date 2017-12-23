@@ -148,6 +148,7 @@ class Tank
   end
 
   def fire_bullet
+    print "pang"
   	# @tank_bullet.bullet(@x, @y, @z)
     # Create bullet at xx,yy loc
     # give travel time pr. tick set by bullet variable.
@@ -172,7 +173,7 @@ class Game < Gosu::Window
     images_test
     @boss = Tank.new(@width, @height, @image_boss)
     @player = Tank.new(@width, @height, @image_player)
-    # @tank_bullet = Ammo.new(@image_bullet)
+    @tank_bullet = Ammo.new(@image_bullet)
   end
 
   def vars_test
@@ -193,7 +194,7 @@ class Game < Gosu::Window
     when Gosu::KB_ESCAPE then
       close
       puts 'Quitting'
-    when Gosu::KB_RIGHT_SHIFT then
+    when Gosu::KB_RIGHT_SHIFT, Gosu::KB_LEFT_SHIFT then
       return if @run_boost_active
       puts 'Activating Run boost! (5 seconds)'
       @run_boost_active = true
