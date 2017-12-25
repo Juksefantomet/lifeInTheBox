@@ -1,22 +1,32 @@
 require 'gosu'
 # require 'socket'
 
+$shot_fired = false
+
 # Ammotypes
 class Ammo
   attr_accessor
   def initialize(image)
     @image = image
+    if @image == nil
+      print("image empty")
+    end
     @bullet_speed = 10
     @damage = 10
     @x = 0
     @y = 0
     @z = 0
   end
-  def bullet(*)
+
+  def draw(*)
     @image.draw(@x, @y, @z)
     # Create bullet at xx,yy loc
     # give travel time pr. tick set by bullet variable.
     # calculate angle where to shoot from player angle
+  end
+
+  def update(*)
+    # @image.draw(@x, @y, @z)
   end
 end
 
@@ -37,6 +47,7 @@ class Tank
     @y = 0
     @z = 0
     @base_speed = 3
+    @image_bullet = Gosu::Image.new('bullet.png')
     @tank_bullet = Ammo.new(@image_bullet)
   end
 
@@ -150,8 +161,12 @@ class Tank
 
   def fire_bullet
     print "pang"
+    $shot_fired = true
+    print $shot_fired
+    # @tank_bullet = Ammo.new(@image_bullet)
   	# @tank_bullet.bullet(@x, @y, @z)
-  	@tank_bullet.bullet(@x, @y, @z)
+  	# @tank_bullet.draw(@x, @y, @z)
+    # @tank_bullet.draw(1, 1, 1)
     # Create bullet at xx,yy loc
     # give travel time pr. tick set by bullet variable.
     # calculate angle where to shoot from player angle
@@ -243,6 +258,9 @@ class Game < Gosu::Window
   def draw
     @boss.draw(@x, @y, 1)
     @player.drawrot(@xx, @yy, @zz)
+    if $shot_fired == true
+      @tank_bullet.draw(@x, @y, 1)
+    end
   end
 end
 
