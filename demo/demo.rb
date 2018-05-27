@@ -6,6 +6,7 @@ $shot_fired = false
 # Ammotypes
 class Ammo
   attr_accessor
+
   def initialize(image)
     @image = image
     if @image == nil
@@ -33,6 +34,7 @@ end
 # tank class - type player/boss - image used
 class Tank
   attr_accessor
+
   def initialize(width, height, image)
     @image = image
     @xx = 0
@@ -100,7 +102,7 @@ class Tank
     @yy += -@base_speed/8
     @angle = -45.0
   end
-  
+
   def moveupleft
     spin_tank_wheels
     @xx += -@base_speed/8
@@ -114,6 +116,7 @@ class Tank
     @xx += @base_speed/8
     @angle = 45.0
   end
+
   def movedownleft
     spin_tank_wheels
     @yy += @base_speed/8
@@ -164,8 +167,8 @@ class Tank
     $shot_fired = true
     print $shot_fired
     # @tank_bullet = Ammo.new(@image_bullet)
-  	# @tank_bullet.bullet(@x, @y, @z)
-  	# @tank_bullet.draw(@x, @y, @z)
+    # @tank_bullet.bullet(@x, @y, @z)
+    # @tank_bullet.draw(@x, @y, @z)
     # @tank_bullet.draw(1, 1, 1)
     # Create bullet at xx,yy loc
     # give travel time pr. tick set by bullet variable.
@@ -181,6 +184,7 @@ end
 # The class that runs the game - woop!
 class Game < Gosu::Window
   attr_accessor :width, :height
+
   def initialize
     @width = 1024
     @height = 768
@@ -208,14 +212,14 @@ class Game < Gosu::Window
 
   def button_down(id)
     case id
-    when Gosu::KB_ESCAPE then
-      close
-      puts 'Quitting'
-    when Gosu::KB_RIGHT_SHIFT, Gosu::KB_LEFT_SHIFT then
-      return if @run_boost_active
-      puts 'Activating Run boost! (5 seconds)'
-      @run_boost_active = true
-      @player.accelerate
+      when Gosu::KB_ESCAPE then
+        close
+        puts 'Quitting'
+      when Gosu::KB_RIGHT_SHIFT, Gosu::KB_LEFT_SHIFT then
+        return if @run_boost_active
+        puts 'Activating Run boost! (5 seconds)'
+        @run_boost_active = true
+        @player.accelerate
     end
   end
 
@@ -224,7 +228,8 @@ class Game < Gosu::Window
   end
 
   # make this an independant class
-  def drawgui()end
+  def drawgui()
+  end
 
   def tickcooldowns
     if @temp_tick != 300
@@ -245,7 +250,7 @@ class Game < Gosu::Window
       @check_tick += 1
     end
     return unless @run_boost_active
-      tickcooldowns
+    tickcooldowns
   end
 
   def update
