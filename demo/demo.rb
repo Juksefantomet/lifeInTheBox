@@ -98,29 +98,29 @@ class Tank
 
   def moveupright
     spin_tank_wheels
-    @xx += @base_speed/8
-    @yy += -@base_speed/8
+    @xx += @base_speed / 8
+    @yy += -@base_speed / 8
     @angle = -45.0
   end
 
   def moveupleft
     spin_tank_wheels
-    @xx += -@base_speed/8
-    @yy += -@base_speed/8
+    @xx += -@base_speed / 8
+    @yy += -@base_speed / 8
     @angle = -135.0
   end
 
   def movedownright
     spin_tank_wheels
-    @yy += @base_speed/8
-    @xx += @base_speed/8
+    @yy += @base_speed / 8
+    @xx += @base_speed / 8
     @angle = 45.0
   end
 
   def movedownleft
     spin_tank_wheels
-    @yy += @base_speed/8
-    @xx += -@base_speed/8
+    @yy += @base_speed / 8
+    @xx += -@base_speed / 8
     @angle = 135.0
   end
 
@@ -212,14 +212,14 @@ class Game < Gosu::Window
 
   def button_down(id)
     case id
-      when Gosu::KB_ESCAPE then
-        close
-        puts 'Quitting'
-      when Gosu::KB_RIGHT_SHIFT, Gosu::KB_LEFT_SHIFT then
-        return if @run_boost_active
-        puts 'Activating Run boost! (5 seconds)'
-        @run_boost_active = true
-        @player.accelerate
+    when Gosu::KB_ESCAPE then
+      close
+      puts 'Quitting'
+    when Gosu::KB_RIGHT_SHIFT, Gosu::KB_LEFT_SHIFT then
+      return if @run_boost_active
+      puts 'Activating Run boost! (5 seconds)'
+      @run_boost_active = true
+      @player.accelerate
     end
   end
 
@@ -248,6 +248,11 @@ class Game < Gosu::Window
       @check_tick = 0
     else
       @check_tick += 1
+    end
+    $shot_fired? @tank_bullet_tick += 1 : @tank_bullet_tick = 0
+    if @check_tick == 10
+      @tank_bullet_tick = 0
+      $shot_fired = false
     end
     return unless @run_boost_active
     tickcooldowns
