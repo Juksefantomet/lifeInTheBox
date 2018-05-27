@@ -1,6 +1,5 @@
 source 'https://rubygems.org'
 
-gemspec
-
 gem 'rubocop'
 gem 'gosu'
+gem 'ruby', '2.5.1'
