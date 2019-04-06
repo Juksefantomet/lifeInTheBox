@@ -1,4 +1,6 @@
-# Ammotypes
+# frozen_string_literal: true
+
+# Ammo
 class Ammo
   attr_accessor
 

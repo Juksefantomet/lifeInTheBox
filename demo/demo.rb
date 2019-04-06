@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 $LOAD_PATH.unshift(File.expand_path('components', __dir__))
 
 require 'gosu'
@@ -6,6 +8,7 @@ require 'gosu'
 # Game components
 require 'ammo'
 require 'tank'
+require 'gui'
 
 $shot_fired = false
 
@@ -54,10 +57,6 @@ class Game < Gosu::Window
 
   def needs_cursor?
     false
-  end
-
-  # make this an independant class
-  def drawgui()
   end
 
   def tickcooldowns

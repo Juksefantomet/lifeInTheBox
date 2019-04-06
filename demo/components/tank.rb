@@ -1,4 +1,6 @@
-# tank class - type player/boss - image used
+# frozen_string_literal: true
+
+# tank
 class Tank
   attr_accessor
 
