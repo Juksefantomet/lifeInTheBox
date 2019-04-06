@@ -2,7 +2,7 @@
 
 # Ammo
 class Ammo
-  attr_accessor
+  attr_accessor :x, :y, :z
 
   def initialize(image)
     @image = image
@@ -24,6 +24,7 @@ class Ammo
   end
 
   def update(*)
+    @x = @x + @bullet_speed
     # @image.draw(@x, @y, @z)
   end
 end

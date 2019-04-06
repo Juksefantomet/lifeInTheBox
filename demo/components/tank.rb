@@ -5,6 +5,7 @@ class Tank
   attr_accessor
 
   def initialize(width, height, image)
+    # @controller = MovementController.new
     @image = image
     @xx = 0
     @yy = 0
@@ -93,35 +94,7 @@ class Tank
     @angle = 135.0
   end
 
-  def movement_controller
-    if Gosu.button_down? Gosu::KB_LEFT
-      moveleft
-    end
-    if Gosu.button_down? Gosu::KB_RIGHT
-      moveright
-    end
-    if Gosu.button_down? Gosu::KB_UP
-      moveup
-    end
-    if Gosu.button_down? Gosu::KB_DOWN
-      movedown
-    end
-    if (Gosu.button_down? Gosu::KB_UP and Gosu.button_down? Gosu::KB_RIGHT) or (Gosu.button_down? Gosu::KB_RIGHT and Gosu.button_down? Gosu::KB_UP)
-      moveupright
-    end
-    if (Gosu.button_down? Gosu::KB_DOWN and Gosu.button_down? Gosu::KB_RIGHT) or (Gosu.button_down? Gosu::KB_RIGHT and Gosu.button_down? Gosu::KB_DOWN)
-      movedownright
-    end
-    if (Gosu.button_down? Gosu::KB_UP and Gosu.button_down? Gosu::KB_LEFT) or (Gosu.button_down? Gosu::KB_LEFT and Gosu.button_down? Gosu::KB_UP)
-      moveupleft
-    end
-    if (Gosu.button_down? Gosu::KB_DOWN and Gosu.button_down? Gosu::KB_LEFT) or (Gosu.button_down? Gosu::KB_LEFT and Gosu.button_down? Gosu::KB_DOWN)
-      movedownleft
-    end
-    if Gosu.button_down? Gosu::KB_SPACE
-      fire_bullet
-    end
-  end
+  # movement controller class
 
   def accelerate
     @base_speed = 10
@@ -146,6 +119,6 @@ class Tank
 
   def update
     center_the_boss
-    movement_controller
+    # @controller.movement_controller
   end
 end

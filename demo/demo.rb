@@ -10,6 +10,9 @@ require 'ammo'
 require 'tank'
 require 'gui'
 
+# player controller
+require 'movement_controller'
+
 $shot_fired = false
 
 
@@ -18,6 +21,7 @@ class Game < Gosu::Window
   attr_accessor :width, :height
 
   def initialize
+    @controller = MovementController.new
     @width = 1024
     @height = 768
     super(width, height, false)
@@ -59,7 +63,7 @@ class Game < Gosu::Window
     false
   end
 
-  def tickcooldowns
+  def tick_cooldowns
     if @temp_tick != 300
       @temp_tick += 1
     end
@@ -71,7 +75,7 @@ class Game < Gosu::Window
     @player.slowdown
   end
 
-  def checkticks
+  def check_ticks
     if @check_tick == 60
       @check_tick = 0
     else
@@ -83,21 +87,23 @@ class Game < Gosu::Window
       $shot_fired = false
     end
     return unless @run_boost_active
-    tickcooldowns
+    tick_cooldowns
   end
 
   def update
-    checkticks
-    # drawgui
+    check_ticks
+    # Gui - drawgui
     @boss.update
     @player.update
+    @tank_bullet.update
+    @controller.movement_controller(@player)
   end
 
   def draw
     @boss.draw(@x, @y, 1)
     @player.drawrot(@xx, @yy, @zz)
     if $shot_fired == true
-      @tank_bullet.draw(@x, @y, 1)
+      @tank_bullet.draw(@xx, @yy, @zz)
     end
   end
 end
