@@ -26,11 +26,10 @@ class MovementController
     if (Gosu.button_down? Gosu::KB_DOWN and Gosu.button_down? Gosu::KB_LEFT) or (Gosu.button_down? Gosu::KB_LEFT and Gosu.button_down? Gosu::KB_DOWN)
       obj.movedownleft
     end
-    if Gosu.button_down? Gosu::KB_SPACE
-      # @tank_bullet.x = @xx
-      # @tank_bullet.y = @yy
-      # @tank_bullet.z = @zz
-      obj.fire_bullet
+    unless $shot_fired
+      if Gosu.button_down? Gosu::KB_SPACE
+        $shot_fired = true
+      end
     end
   end
 end

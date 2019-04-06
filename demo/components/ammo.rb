@@ -2,7 +2,7 @@
 
 # Ammo
 class Ammo
-  attr_accessor :x, :y, :z
+  attr_accessor
 
   def initialize(image)
     @image = image
@@ -17,7 +17,7 @@ class Ammo
   end
 
   def draw(*)
-    @image.draw(@x, @y, @z)
+    @image.draw(1, 1, 1)
     # Create bullet at xx,yy loc
     # give travel time pr. tick set by bullet variable.
     # calculate angle where to shoot from player angle

@@ -4,8 +4,7 @@
 class Tank
   attr_accessor
 
-  def initialize(width, height, image)
-    # @controller = MovementController.new
+  def initialize(width, height, image, ammo_image)
     @image = image
     @xx = 0
     @yy = 0
@@ -19,8 +18,7 @@ class Tank
     @y = 0
     @z = 0
     @base_speed = 3
-    @image_bullet = Gosu::Image.new('bullet.png')
-    @tank_bullet = Ammo.new(@image_bullet)
+    @tank_bullet = Ammo.new(ammo_image)
   end
 
   def draw(*)
@@ -94,8 +92,6 @@ class Tank
     @angle = 135.0
   end
 
-  # movement controller class
-
   def accelerate
     @base_speed = 10
   end
@@ -105,13 +101,13 @@ class Tank
   end
 
   def fire_bullet
-    print "pang"
-    $shot_fired = true
-    print $shot_fired
+    # @tank_bullet.draw
+    if $shot_fired
+      puts "Fired da gun: #{$shot_fired}"
+    end
     # @tank_bullet = Ammo.new(@image_bullet)
     # @tank_bullet.bullet(@x, @y, @z)
     # @tank_bullet.draw(@x, @y, @z)
-    # @tank_bullet.draw(1, 1, 1)
     # Create bullet at xx,yy loc
     # give travel time pr. tick set by bullet variable.
     # calculate angle where to shoot from player angle
@@ -119,6 +115,5 @@ class Tank
 
   def update
     center_the_boss
-    # @controller.movement_controller
   end
 end

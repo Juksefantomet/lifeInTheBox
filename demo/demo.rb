@@ -14,6 +14,7 @@ require 'gui'
 require 'movement_controller'
 
 $shot_fired = false
+$fire_cooldown = false
 
 
 # The class that runs the game - woop!
@@ -21,6 +22,8 @@ class Game < Gosu::Window
   attr_accessor :width, :height
 
   def initialize
+    @firecooldown = 0
+    @tank_bullet_tick = 0
     @controller = MovementController.new
     @width = 1024
     @height = 768
@@ -28,9 +31,9 @@ class Game < Gosu::Window
     self.caption = 'Life in the box - DEMO'
     vars_test
     images_test
-    @boss = Tank.new(@width, @height, @image_boss)
-    @player = Tank.new(@width, @height, @image_player)
-    @tank_bullet = Ammo.new(@image_bullet)
+    @boss = Tank.new(@width, @height, @image_boss, @image_bullet)
+    @player = Tank.new(@width, @height, @image_player, @image_bullet)
+    # @tank_bullet = Ammo.new(@image_bullet)
   end
 
   def vars_test
@@ -81,11 +84,29 @@ class Game < Gosu::Window
     else
       @check_tick += 1
     end
-    $shot_fired? @tank_bullet_tick += 1 : @tank_bullet_tick = 0
-    if @check_tick == 10
-      @tank_bullet_tick = 0
-      $shot_fired = false
+
+    if $shot_fired
+      @tank_bullet_tick += 1
+      if @tank_bullet_tick >= 20
+        $fire_cooldown = true
+        @firecooldown = 10
+        @tank_bullet_tick = 0
+        $shot_fired = false
+      end
+    else
+      # nothing happens
     end
+
+    puts @firecooldown
+
+    if $fire_cooldown && @firecooldown != 0
+      @firecooldown = @firecooldown - 1
+    end
+
+    if @firecooldown <= 0
+      $fire_cooldown = false
+    end
+
     return unless @run_boost_active
     tick_cooldowns
   end
@@ -95,15 +116,16 @@ class Game < Gosu::Window
     # Gui - drawgui
     @boss.update
     @player.update
-    @tank_bullet.update
+    # @tank_bullet.update
     @controller.movement_controller(@player)
   end
 
   def draw
     @boss.draw(@x, @y, 1)
     @player.drawrot(@xx, @yy, @zz)
-    if $shot_fired == true
-      @tank_bullet.draw(@xx, @yy, @zz)
+
+    unless $fire_cooldown && $shot_fired
+      @player.fire_bullet
     end
   end
 end
