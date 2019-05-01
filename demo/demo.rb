@@ -23,7 +23,6 @@ class Game < Gosu::Window
 
   def initialize
     @firecooldown = 0
-    @tank_bullet_tick = 0
     @controller = MovementController.new
     @width = 1024
     @height = 768
@@ -33,7 +32,6 @@ class Game < Gosu::Window
     images_test
     @boss = Tank.new(@width, @height, @image_boss, @image_bullet)
     @player = Tank.new(@width, @height, @image_player, @image_bullet)
-    # @tank_bullet = Ammo.new(@image_bullet)
   end
 
   def vars_test
@@ -71,11 +69,12 @@ class Game < Gosu::Window
       @temp_tick += 1
     end
     return unless @temp_tick == 300
-    @temp_tick == 300
-    @temp_tick = 0
-    @run_boost_active = false
-    @run_cool_down_active = true
-    @player.slowdown
+    if @temp_tick == 300
+      @temp_tick = 0
+      @run_boost_active = false
+      @run_cool_down_active = true
+      @player.slowdown
+    end
   end
 
   def check_ticks
@@ -86,44 +85,32 @@ class Game < Gosu::Window
     end
 
     if $shot_fired
-      @tank_bullet_tick += 1
-      if @tank_bullet_tick >= 20
-        $fire_cooldown = true
-        @firecooldown = 10
-        @tank_bullet_tick = 0
+      @firecooldown += 1
+      if @firecooldown >= 60
         $shot_fired = false
+        $fire_cooldown = false
+        @firecooldown = 0
       end
     else
-      # nothing happens
+      # do nothing
     end
 
-    puts @firecooldown
-
-    if $fire_cooldown && @firecooldown != 0
-      @firecooldown = @firecooldown - 1
-    end
-
-    if @firecooldown <= 0
-      $fire_cooldown = false
-    end
 
     return unless @run_boost_active
+
     tick_cooldowns
   end
 
   def update
     check_ticks
-    # Gui - drawgui
     @boss.update
     @player.update
-    # @tank_bullet.update
     @controller.movement_controller(@player)
   end
 
   def draw
     @boss.draw(@x, @y, 1)
     @player.drawrot(@xx, @yy, @zz)
-
     unless $fire_cooldown && $shot_fired
       @player.fire_bullet
     end

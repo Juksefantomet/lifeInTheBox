@@ -5,6 +5,7 @@ class Tank
   attr_accessor
 
   def initialize(width, height, image, ammo_image)
+    @current_direction = 'right'
     @image = image
     @xx = 0
     @yy = 0
@@ -19,6 +20,13 @@ class Tank
     @z = 0
     @base_speed = 3
     @tank_bullet = Ammo.new(ammo_image)
+  end
+
+  def facing_direction(direction)
+    if direction == 'get'
+      return @current_direction
+    end
+    @current_direction = direction
   end
 
   def draw(*)
@@ -101,16 +109,25 @@ class Tank
   end
 
   def fire_bullet
-    # @tank_bullet.draw
-    if $shot_fired
-      puts "Fired da gun: #{$shot_fired}"
+    # Align bullet to tanks position when no shots are fired
+    unless $shot_fired
+      @tank_bullet.set_bullet_loc(@xx, @yy, @zz, @current_direction)
     end
-    # @tank_bullet = Ammo.new(@image_bullet)
-    # @tank_bullet.bullet(@x, @y, @z)
-    # @tank_bullet.draw(@x, @y, @z)
-    # Create bullet at xx,yy loc
-    # give travel time pr. tick set by bullet variable.
-    # calculate angle where to shoot from player angle
+
+    # Tell the bullet what direction we are facing
+    case @current_direction
+    when 'left'
+      @tank_bullet.fire('left')
+    when 'right'
+      @tank_bullet.fire('right')
+    when 'up'
+      @tank_bullet.fire('up')
+    when 'down'
+      @tank_bullet.fire('down')
+    end
+
+    # trigger bullet update
+    @tank_bullet.update
   end
 
   def update
