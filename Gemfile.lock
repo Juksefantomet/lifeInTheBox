@@ -2,8 +2,8 @@ GEM
   remote: https://rubygems.org/
   specs:
     ast (2.4.0)
-    gosu (0.13.3)
-    gosu (0.13.3-x64-mingw32)
+    gosu (0.14.5)
+    gosu (0.14.5-x64-mingw32)
     parallel (1.12.1)
     parser (2.5.1.0)
       ast (~> 2.4.0)
@@ -24,7 +24,7 @@ PLATFORMS
   x64-mingw32
 
 DEPENDENCIES
-  gosu (= 0.13.3)
+  gosu (= 0.14.5)
   rubocop
 
 RUBY VERSION
